@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using CQRSTest.Models;
 using MongoDB.Driver;
 using MongoDB.Driver.Builders;
 using SeekYouRS.Examples.Events;
+using SeekYouRS.Examples.Models;
 using SeekYouRS.Examples.Queries;
 using SeekYouRS.Storing;
 using System;
@@ -51,6 +51,14 @@ namespace SeekYouRS.Examples.MongoDB {
                                  });
         }
 
+        private void Handle(AggregateEventBag<PictureAdded> pictureAdded) {
+            AddPicture(new UserModel {Id = pictureAdded.Id}, pictureAdded.EventData.Picture);
+        }
+
+        private void Handle(AggregateEventBag<PictureDeleted> pictureDeleted) {
+            RemovePicture(new UserModel{Id = pictureDeleted.Id}, pictureDeleted.EventData.PictureId);
+        }
+
         private void Add(UserModel user) {
             var s = CreateAndConnectMongoServer();
             var db = s.GetDatabase(DbName);
@@ -73,6 +81,29 @@ namespace SeekYouRS.Examples.MongoDB {
             else
                 Add(model);
 
+            s.Disconnect();
+        }
+
+        private void AddPicture(UserModel model, PictureModel picture) {
+            var s = CreateAndConnectMongoServer();
+            var db = s.GetDatabase(DbName);
+            var coll = db.GetCollection<UserModel>(UsersCollectionName);
+            var user = coll.FindOneAs<UserModel>(Query.EQ("_id", model.Id));
+            user.Pictures.Add(picture);
+            coll.Save(user);
+            s.Disconnect();
+        }
+
+        private void RemovePicture(UserModel model, Guid pictureId) {
+            var s = CreateAndConnectMongoServer();
+            var db = s.GetDatabase(DbName);
+            var coll = db.GetCollection<UserModel>(UsersCollectionName);
+            var user = coll.FindOneAs<UserModel>(Query.EQ("_id", model.Id));
+            var p = user.Pictures.FirstOrDefault(pic => pic.Id == pictureId);
+            if (p != null) {
+                user.Pictures.Remove(p);
+                coll.Save(user);
+            }
             s.Disconnect();
         }
 

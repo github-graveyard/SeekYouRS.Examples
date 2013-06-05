@@ -5,6 +5,7 @@ using MongoDB.Driver;
 using NUnit.Framework;
 using SeekYouRS.Examples.Aggregates;
 using SeekYouRS.Examples.Events;
+using SeekYouRS.Examples.Models;
 using SeekYouRS.Examples.MongoDB;
 using SeekYouRS.Storing;
 
@@ -85,6 +86,32 @@ namespace SeekYouRS.Examples.Tests.MongoDB {
             
             user.Changes.Count.ShouldBeEquivalentTo(0);
             user.History.Count().ShouldBeEquivalentTo(2);
+        }
+
+        [Test]
+        public void TestToAddAndRemovePictures() {
+            var aggregateStore = new MongoDbAggregateStore(MongoConnectionString);
+            var userId = Guid.NewGuid();
+            var user = aggregateStore.GetAggregate<User>(userId);
+
+            user.Create(userId, "Horst", "test@test.com", "123");
+            aggregateStore.Save(user);
+
+            user.Name.Should().BeEquivalentTo("Horst");
+            user.EMail.Should().BeEquivalentTo("test@test.com");
+            user.Pictures.Count.ShouldBeEquivalentTo(0);
+
+            var pic = new PictureModel {
+                                           Id = Guid.NewGuid(),
+                                           Name = "MyPic.jpg",
+                                           Url = "http://cdn.somewhere.com/123/yay.jpg"
+                                       };
+            user.AddPicture(pic);
+            user.Pictures.Count.ShouldBeEquivalentTo(1);
+
+            user.DeletePicture(pic.Id);
+            user.Pictures.Count.ShouldBeEquivalentTo(0);
+            aggregateStore.Save(user);
         }
     }
 }

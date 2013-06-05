@@ -47,5 +47,17 @@ namespace SeekYouRS.Examples.Handler {
             _AggregateEventStore.Save(user);
         }
 
+        private void Execute(AddPicture command) {
+            var user = _AggregateEventStore.GetAggregate<User>(command.Id);
+            user.AddPicture(command.Picture);
+            _AggregateEventStore.Save(user);
+        }
+
+        private void Execute(DeletePicture command) {
+            var user = _AggregateEventStore.GetAggregate<User>(command.Id);
+            user.DeletePicture(command.PictureId);
+            _AggregateEventStore.Save(user);
+        }
+
     }
 }

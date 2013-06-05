@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using CQRSTest.Models;
 using MongoDB.Driver;
 using NUnit.Framework;
 using FluentAssertions;
 using SeekYouRS.Examples.Commands;
 using SeekYouRS.Examples.Handler;
+using SeekYouRS.Examples.Models;
 using SeekYouRS.Examples.MongoDB;
 using SeekYouRS.Examples.Queries;
 
@@ -141,6 +141,36 @@ namespace SeekYouRS.Examples.Tests.MongoDB {
             api.Process(new DeleteUser{Id = id});
             user = api.Retrieve<UserModel>(new GetUser {Id = id});
             user.Should().BeNull();
+        }
+
+        [Test]
+        public void TestToAddAndRemovePictures() {
+            var aggregateStore = new MongoDbAggregateStore(MongoConnectionString);
+            var readModel = new MongoDbReadModel(MongoConnectionString);
+
+            var commands = new UserCommands(aggregateStore);
+            var queries = new UserQueries(readModel);
+
+            var api = new UserApi(commands, queries);
+            var id = Guid.NewGuid();
+
+            api.Process(new CreateUser { Id = id, Name = "Testuser", EMail = "test@mail.com", Password = "123" });
+            var user = api.Retrieve<UserModel>(new GetUser { Id = id });
+            user.Should().NotBeNull();
+
+            var picture = new PictureModel {
+                                               Id = Guid.NewGuid(),
+                                               Name = "SomePic.jpg",
+                                               Url = "https://cdn.somewhere.com/123/somepic.jpg"
+                                           };
+            api.Process(new AddPicture{Id = id, Picture = picture});
+
+            user = api.Retrieve<UserModel>(new GetUser {Id = id});
+            user.Pictures.Count.ShouldBeEquivalentTo(1);
+
+            api.Process(new DeletePicture {Id = id, PictureId = picture.Id});
+            user = api.Retrieve<UserModel>(new GetUser { Id = id });
+            user.Pictures.Count.ShouldBeEquivalentTo(0);
         }
     }
 }
