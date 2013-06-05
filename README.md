@@ -1,4 +1,4 @@
-SeekYouRS.Examples.MongoDB
+SeekYouRS.Examples
 ==========================
 
 Examples for using the SeekYouRS framework
