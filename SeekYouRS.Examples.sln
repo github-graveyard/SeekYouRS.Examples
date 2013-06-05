@@ -1,0 +1,39 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2012
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeekYouRS.Examples", "SeekYouRS.Examples\SeekYouRS.Examples.csproj", "{803E18BC-169C-44CF-8D1C-E1E917DB5E5D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeekYouRS.Examples.MongoDB", "SeekYouRS.Examples.MongoDB\SeekYouRS.Examples.MongoDB.csproj", "{01DB80E1-8D26-4354-980A-8546ACB3BF4F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{2021470E-6CB1-490F-A78E-0633E68912CF}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeekYouRS.Examples.Tests", "SeekYouRS.Examples.Tests\SeekYouRS.Examples.Tests.csproj", "{B305E9AA-0DF3-4D9D-A714-EE469A12F15C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{803E18BC-169C-44CF-8D1C-E1E917DB5E5D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{803E18BC-169C-44CF-8D1C-E1E917DB5E5D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{803E18BC-169C-44CF-8D1C-E1E917DB5E5D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{803E18BC-169C-44CF-8D1C-E1E917DB5E5D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{01DB80E1-8D26-4354-980A-8546ACB3BF4F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{01DB80E1-8D26-4354-980A-8546ACB3BF4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{01DB80E1-8D26-4354-980A-8546ACB3BF4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{01DB80E1-8D26-4354-980A-8546ACB3BF4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B305E9AA-0DF3-4D9D-A714-EE469A12F15C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B305E9AA-0DF3-4D9D-A714-EE469A12F15C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B305E9AA-0DF3-4D9D-A714-EE469A12F15C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B305E9AA-0DF3-4D9D-A714-EE469A12F15C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
