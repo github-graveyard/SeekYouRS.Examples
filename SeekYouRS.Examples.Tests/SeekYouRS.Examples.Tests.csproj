@@ -54,7 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MongoDB\MongoDbAggregateTests.cs" />
-    <Compile Include="MongoDB\MongoDbApiTests.cs" />
+    <Compile Include="MongoDB\MongoDbContextTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
