@@ -1,22 +1,23 @@
 ﻿using System;
 using SeekYouRS.Examples.Aggregates;
 using SeekYouRS.Examples.Commands;
-using SeekYouRS.Messaging;
-using SeekYouRS.Storing;
+using SeekYouRS.Handler;
+using SeekYouRS.Store;
+
 
 namespace SeekYouRS.Examples.Handler {
     public class UserCommands : IExecuteCommands {
-        public event Action<AggregateEvent> Performed;
+        public event Action<AggregateEvent> HasPerformed;
 
         private readonly IStoreAggregates _AggregateEventStore;
 
         public UserCommands(IStoreAggregates aggregateEventStore) {
             _AggregateEventStore = aggregateEventStore;
-            _AggregateEventStore.AggregateHasChanged += OnEventPublished;
+            _AggregateEventStore.AggregateHasChanged += OnHasPerformed;
         }
 
-        private void OnEventPublished(AggregateEvent aggregateEvent) {
-            var handler = Performed;
+        private void OnHasPerformed(AggregateEvent aggregateEvent) {
+            var handler = HasPerformed;
             if (handler != null)
                 handler(aggregateEvent);
         }

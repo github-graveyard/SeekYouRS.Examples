@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using SeekYouRS.Examples.Events;
 using SeekYouRS.Examples.Models;
-using SeekYouRS.Storing;
 
 namespace SeekYouRS.Examples.Aggregates {
     public sealed class User : Aggregate {

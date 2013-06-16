@@ -10,6 +10,7 @@ using SeekYouRS.Examples.Handler;
 using SeekYouRS.Examples.Models;
 using SeekYouRS.Examples.MongoDB;
 using SeekYouRS.Examples.Queries;
+using SeekYouRS.Handler;
 
 namespace SeekYouRS.Examples.Tests.MongoDB {
     [TestFixture]
@@ -30,8 +31,8 @@ namespace SeekYouRS.Examples.Tests.MongoDB {
                 if (db.CollectionExists(MongoDbAggregateStore.AggregateEventCollectionName))
                     db.DropCollection(MongoDbAggregateStore.AggregateEventCollectionName);
 
-                if (db.CollectionExists(MongoDbReadModel.UsersCollectionName))
-                    db.DropCollection(MongoDbReadModel.UsersCollectionName);
+                if (db.CollectionExists(MongoDbReadModelStore.UsersCollectionName))
+                    db.DropCollection(MongoDbReadModelStore.UsersCollectionName);
             }
 
             server.Disconnect();
@@ -40,10 +41,10 @@ namespace SeekYouRS.Examples.Tests.MongoDB {
         [Test]
         public void TestToCreateUserAndReadIt() {
             var aggregateStore = new MongoDbAggregateStore(MongoConnectionString);
-            var readModel = new MongoDbReadModel(MongoConnectionString);
+            var readModel = new MongoDbReadModelStore(MongoConnectionString);
 
             var commands = new UserCommands(aggregateStore);
-            var queries = new UserQueries(readModel);
+            var queries = new ReadModelHandler(readModel);
 
             var context = new UserContext(commands, queries);
             var id = Guid.NewGuid();
@@ -58,10 +59,10 @@ namespace SeekYouRS.Examples.Tests.MongoDB {
         [Test]
         public void TestToCreateAndChangeUserViaApi() {
             var aggregateStore = new MongoDbAggregateStore(MongoConnectionString);
-            var readModel = new MongoDbReadModel(MongoConnectionString);
+            var readModel = new MongoDbReadModelStore(MongoConnectionString);
 
             var commands = new UserCommands(aggregateStore);
-            var queries = new UserQueries(readModel);
+            var queries = new ReadModelHandler(readModel);
 
             var context = new UserContext(commands, queries);
             var id = Guid.NewGuid();
@@ -78,10 +79,10 @@ namespace SeekYouRS.Examples.Tests.MongoDB {
         [Test]
         public void TestToCreateTwoUsersAndChangeOneOfThem() {
             var aggregateStore = new MongoDbAggregateStore(MongoConnectionString);
-            var readModel = new MongoDbReadModel(MongoConnectionString);
+            var readModel = new MongoDbReadModelStore(MongoConnectionString);
 
             var commands = new UserCommands(aggregateStore);
-            var queries = new UserQueries(readModel);
+            var queries = new ReadModelHandler(readModel);
 
             var context = new UserContext(commands, queries);
             var uid1 = Guid.NewGuid();
@@ -105,10 +106,10 @@ namespace SeekYouRS.Examples.Tests.MongoDB {
         [Test]
         public void TestToGetAllUsers() {
             var aggregateStore = new MongoDbAggregateStore(MongoConnectionString);
-            var readModel = new MongoDbReadModel(MongoConnectionString);
+            var readModel = new MongoDbReadModelStore(MongoConnectionString);
 
             var commands = new UserCommands(aggregateStore);
-            var queries = new UserQueries(readModel);
+            var queries = new ReadModelHandler(readModel);
 
             var context = new UserContext(commands, queries);
             for (var i = 0; i < 5; i++)
@@ -126,10 +127,10 @@ namespace SeekYouRS.Examples.Tests.MongoDB {
         [Test]
         public void TestToDeleteUser() {
             var aggregateStore = new MongoDbAggregateStore(MongoConnectionString);
-            var readModel = new MongoDbReadModel(MongoConnectionString);
+            var readModel = new MongoDbReadModelStore(MongoConnectionString);
 
             var commands = new UserCommands(aggregateStore);
-            var queries = new UserQueries(readModel);
+            var queries = new ReadModelHandler(readModel);
 
             var context = new UserContext(commands, queries);
             var id = Guid.NewGuid();
@@ -146,10 +147,10 @@ namespace SeekYouRS.Examples.Tests.MongoDB {
         [Test]
         public void TestToAddAndRemovePictures() {
             var aggregateStore = new MongoDbAggregateStore(MongoConnectionString);
-            var readModel = new MongoDbReadModel(MongoConnectionString);
+            var readModel = new MongoDbReadModelStore(MongoConnectionString);
 
             var commands = new UserCommands(aggregateStore);
-            var queries = new UserQueries(readModel);
+            var queries = new ReadModelHandler(readModel);
 
             var context = new UserContext(commands, queries);
             var id = Guid.NewGuid();

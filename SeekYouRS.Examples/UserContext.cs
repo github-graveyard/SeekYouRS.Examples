@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using SeekYouRS.Messaging;
+﻿using SeekYouRS.Handler;
 
 namespace SeekYouRS.Examples {
-    public sealed class UserContext : Context {
-        public UserContext(IExecuteCommands commandHandler, IRetrieveModels queriesHandler) : base(commandHandler, queriesHandler) {
+	public sealed class UserContext : Context {
+		public UserContext(IExecuteCommands commandHandler, ReadModelHandler readModelHandler)
+			: base(commandHandler, readModelHandler) {
 
-        }
-    }
+		}
+	}
 }

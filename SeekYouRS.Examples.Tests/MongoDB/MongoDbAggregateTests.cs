@@ -7,7 +7,7 @@ using SeekYouRS.Examples.Aggregates;
 using SeekYouRS.Examples.Events;
 using SeekYouRS.Examples.Models;
 using SeekYouRS.Examples.MongoDB;
-using SeekYouRS.Storing;
+using SeekYouRS.Store;
 
 namespace SeekYouRS.Examples.Tests.MongoDB {
     [TestFixture]
@@ -29,8 +29,8 @@ namespace SeekYouRS.Examples.Tests.MongoDB {
                 if (db.CollectionExists(MongoDbAggregateStore.AggregateEventCollectionName))
                     db.DropCollection(MongoDbAggregateStore.AggregateEventCollectionName);
                 
-                if (db.CollectionExists(MongoDbReadModel.UsersCollectionName))
-                    db.DropCollection(MongoDbReadModel.UsersCollectionName);
+                if (db.CollectionExists(MongoDbReadModelStore.UsersCollectionName))
+                    db.DropCollection(MongoDbReadModelStore.UsersCollectionName);
             }
 
             server.Disconnect();
