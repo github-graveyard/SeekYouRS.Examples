@@ -38,9 +38,9 @@
     <Reference Include="MongoDB.Driver">
       <HintPath>..\packages\mongocsharpdriver.1.8.1\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
-    <Reference Include="SeekYouRS, Version=1.0.0.23078, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="SeekYouRS, Version=1.1.17.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\SeekYouRS.1.0.0\lib\net45\SeekYouRS.dll</HintPath>
+      <HintPath>..\packages\SeekYouRS.1.1.17\lib\net45\SeekYouRS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -51,25 +51,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Commands\DeletePicture.cs" />
-    <Compile Include="Events\PictureDeleted.cs" />
     <Compile Include="Aggregates\User.cs" />
-    <Compile Include="Commands\AddPicture.cs" />
     <Compile Include="Commands\CreateUser.cs" />
     <Compile Include="Commands\DeleteUser.cs" />
     <Compile Include="Commands\ICommand.cs" />
     <Compile Include="Commands\ChangeUser.cs" />
     <Compile Include="Events\BaseEvent.cs" />
-    <Compile Include="Events\PictureAdded.cs" />
     <Compile Include="Events\UserCreated.cs" />
     <Compile Include="Events\UserDeleted.cs" />
     <Compile Include="Events\UserChanged.cs" />
     <Compile Include="Handler\UserCommands.cs" />
-    <Compile Include="Models\PictureModel.cs" />
+    <Compile Include="Handler\UserReadModelHandler.cs" />
     <Compile Include="Models\UserModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Queries\GetAllUsers.cs" />
     <Compile Include="Queries\GetUser.cs" />
+    <Compile Include="Queries\UserQueries.cs" />
     <Compile Include="UserContext.cs" />
   </ItemGroup>
   <ItemGroup>

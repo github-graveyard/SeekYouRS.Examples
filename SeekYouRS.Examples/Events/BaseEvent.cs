@@ -5,8 +5,6 @@ namespace SeekYouRS.Examples.Events {
     [BsonKnownTypes(typeof(UserCreated))]
     [BsonKnownTypes(typeof(UserDeleted))]
     [BsonKnownTypes(typeof(UserChanged))]
-    [BsonKnownTypes(typeof(PictureAdded))]
-    [BsonKnownTypes(typeof(PictureDeleted))]
     public abstract class BaseEvent {
     }
 }

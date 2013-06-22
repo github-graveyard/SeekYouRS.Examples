@@ -38,9 +38,9 @@
     <Reference Include="MongoDB.Driver">
       <HintPath>..\packages\mongocsharpdriver.1.8.1\lib\net35\MongoDB.Driver.dll</HintPath>
     </Reference>
-    <Reference Include="SeekYouRS, Version=1.0.0.23078, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="SeekYouRS, Version=1.1.17.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\SeekYouRS.1.0.0\lib\net45\SeekYouRS.dll</HintPath>
+      <HintPath>..\packages\SeekYouRS.1.1.17\lib\net45\SeekYouRS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -53,7 +53,7 @@
   <ItemGroup>
     <Compile Include="AggregateEventWrapper.cs" />
     <Compile Include="MongoDbAggregateStore.cs" />
-    <Compile Include="MongoDbReadModelStore.cs" />
+    <Compile Include="MongoDbUserReadModelStore.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

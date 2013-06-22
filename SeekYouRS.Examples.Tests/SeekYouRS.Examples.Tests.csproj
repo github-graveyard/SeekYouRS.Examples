@@ -41,9 +41,9 @@
     <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.2\lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="SeekYouRS, Version=1.0.0.23078, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="SeekYouRS, Version=1.1.17.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\SeekYouRS.1.0.0\lib\net45\SeekYouRS.dll</HintPath>
+      <HintPath>..\packages\SeekYouRS.1.1.17\lib\net45\SeekYouRS.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />

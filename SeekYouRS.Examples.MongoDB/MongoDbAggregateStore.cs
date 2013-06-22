@@ -8,72 +8,54 @@ using MongoDB.Driver.Builders;
 
 namespace SeekYouRS.Examples.MongoDB {
 
-	public sealed class MongoDbAggregateStore : IStoreAggregates {
+	public sealed class MongoDbAggregateStore : IStoreAndRetrieveAggregates, IDisposable {
 
 		private readonly string _MongoConnectionString;
+		private readonly MongoClient _MongoClient;
+		private readonly MongoServer _MongoServer;
+		private readonly MongoDatabase _MongoDatabase;
+		private readonly MongoCollection<AggregateEventWrapper> _Collection;
+
 		private const string DbName = "cqrs-test";
 		public const string AggregateEventCollectionName = "aggregateevents";
 
-		public event Action<AggregateEvent> AggregateHasChanged;
-
 		public MongoDbAggregateStore(string mongoConnectionString) {
 			_MongoConnectionString = mongoConnectionString;
+			_MongoClient = new MongoClient(mongoConnectionString);
+			_MongoServer = _MongoClient.GetServer();
+			_MongoServer.Connect();
+			_MongoDatabase = _MongoServer.GetDatabase(DbName);
+			_Collection = _MongoDatabase.GetCollection<AggregateEventWrapper>(AggregateEventCollectionName);
 		}
 
-		private void OnAggregateHasChanged(AggregateEvent obj) {
-			var handler = AggregateHasChanged;
-			if (handler != null) handler(obj);
+		public void Save(IEnumerable<AggregateEvent> changes) {
+			changes
+				.ToList()
+				.ForEach(c => _Collection.Insert(new AggregateEventWrapper {
+					                                                           Id = Guid.NewGuid(),
+					                                                           AggregateReference = c.Id,
+					                                                           TimeStamp = (DateTime) c.GetType().GetProperty("Timestamp").GetValue(c),
+					                                                           Event = c.GetType().GetProperty("EventData").GetValue(c) as BaseEvent
+				                                                           }));
 		}
 
-		public TAggregate GetAggregate<TAggregate>(Guid aggregateId) where TAggregate : Aggregate, new() {
-			var mConnection = new MongoClient(_MongoConnectionString);
-			var mServer = mConnection.GetServer();
-			mServer.Connect();
-			var db = mServer.GetDatabase(DbName);
-			var collection = db.GetCollection<AggregateEventWrapper>(AggregateEventCollectionName);
+		public IEnumerable<AggregateEvent> GetEventsBy(Guid id) {
+			var storedEvents = _Collection.FindAs<AggregateEventWrapper>(Query.EQ("AggregateReference", id));
+			var events = new List<AggregateEvent>();
 
-			var aggregateHistory = collection.FindAs<AggregateEventWrapper>(Query.EQ("AggregateReference", aggregateId)).ToList();
-
-			var aggregate = new TAggregate {
-				History = new List<AggregateEvent>()
-			};
-
-			foreach (var historyEntry in aggregateHistory) {
-				var eventType = historyEntry.Event.GetType();
-				var eventBagType = typeof (AggregateEventBag<>).MakeGenericType(eventType);
-				var eInstance = Activator.CreateInstance(eventBagType, new object[] {historyEntry.AggregateReference, historyEntry.TimeStamp});
-				eInstance.GetType().GetProperty("EventData").SetValue(eInstance, historyEntry.Event);
-				((List<AggregateEvent>)aggregate.History).Add(eInstance as AggregateEvent);
+			foreach (var storedEvent in storedEvents) {
+				var eventBagType = typeof (AggregateEventBag<>).MakeGenericType(storedEvent.Event.GetType());
+				var eventBagInstance = Activator.CreateInstance(eventBagType, new object[] {storedEvent.AggregateReference, storedEvent.TimeStamp});
+				eventBagInstance.GetType().GetProperty("EventData").SetValue(eventBagInstance, storedEvent.Event);
+				events.Add((AggregateEvent) eventBagInstance);
 			}
 
-			mServer.Disconnect();
-			return aggregate;
+			return events;
 		}
 
-		public void Save<TAggregate>(TAggregate aggregate) where TAggregate : SeekYouRS.Aggregate {
-			var mConnection = new MongoClient(_MongoConnectionString);
-			var mServer = mConnection.GetServer();
-			mServer.Connect();
-			var db = mServer.GetDatabase(DbName);
-			var collection = db.GetCollection<AggregateEventWrapper>(AggregateEventCollectionName);
-			aggregate.Changes
-					 .ToList()
-					 .ForEach(c => {
-								  var wrapper = new AggregateEventWrapper {
-																			  Id = Guid.NewGuid(),
-																			  AggregateReference = aggregate.Id,
-																			  TimeStamp = (DateTime)c.GetType().GetProperty("Timestamp").GetValue(c),
-																			  Event = c.GetType().GetProperty("EventData").GetValue(c) as BaseEvent
-																		  };
-								  collection.Insert(wrapper);
-								  OnAggregateHasChanged(c);
-							  });
-			
-			aggregate.History = aggregate.History.Concat(aggregate.Changes).ToList();
-			aggregate.Changes.Clear();
-
-			mServer.Disconnect();
+		public void Dispose() {
+			if(_MongoServer.State == MongoServerState.Connected)
+				_MongoServer.Disconnect();
 		}
-  
 	}
 }
